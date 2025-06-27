@@ -9,7 +9,7 @@
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=8A2BE2&background=FF000000&center=true&vCenter=true&width=500&height=60&lines=Discord+Bot+Developer;Full+Stack+Web+Developer;Always+Learning+New+Tech;Passionate+About+Coding)](https://git.io/typing-svg)
 
-[![Discord](https://img.shields.io/badge/Discord-allay__gaming__5m-7289DA?style=for-the-badge&logo=discord&logoColor=white&labelColor=000000)](https://discord.com/users/allay_gaming_5m)
+[![Discord](https://img.shields.io/badge/Discord-allay__gaming__5m-7289DA?style=for-the-badge&logo=discord&logoColor=white&labelColor=000000)](https://discord.gg/5YsStsgmXA)
 [![GitHub followers](https://img.shields.io/github/followers/ALLAY-XD-20?style=for-the-badge&logo=github&logoColor=white&color=purple&labelColor=000000)](https://github.com/ALLAY-XD-20)
 [![Profile Views](https://komarev.com/ghpvc/?username=ALLAY-XD-20&style=for-the-badge&color=blueviolet&labelColor=000000)](https://github.com/ALLAY-XD-20)
 [![GitHub Stars](https://img.shields.io/github/stars/ALLAY-XD-20?style=for-the-badge&logo=github&color=yellow&labelColor=000000)](https://github.com/ALLAY-XD-20)
