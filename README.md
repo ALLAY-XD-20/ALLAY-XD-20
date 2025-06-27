@@ -272,7 +272,7 @@ Currently vibing to: **Synthwave & Lo-fi Hip Hop** 🎶
 
 If you like what I do, consider supporting my work! 
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black&labelColor=000000)](https://buymeacoffee.com/allay_xd_20)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black&labelColor=000000)](upi://pay?pa=pawan-ok@fam)
 [![PayPal](https://img.shields.io/badge/PayPal-Donate-00457C?style=for-the-badge&logo=paypal&logoColor=white&labelColor=000000)](https://paypal.me/allay_xd_20)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-Sponsor-EA4AAA?style=for-the-badge&logo=github-sponsors&logoColor=white&labelColor=000000)](https://github.com/sponsors/ALLAY-XD-20)
 
