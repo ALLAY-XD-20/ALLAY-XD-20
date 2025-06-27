@@ -1,6 +1,6 @@
 # 👋 Welcome to ALLAY_XD_20's Profile!
 
-![Banner](https://cdn.discordapp.com/attachments/1382606226545967165/1388149260024807446/file_00000000c73462309962bf8cb1391c78.png?ex=685fee3e&is=685e9cbe&hm=ec70d5d17bcc13074311590fc4d0f4a0d92e907a569bad3dcb67d688513a5b86&)
+![Banner](https://cdn.discordapp.com/attachments/1382606226545967165/1388198226536169472/standard_4.gif?ex=68601bd8&is=685eca58&hm=9e97807e120f5e2f650af39d86ec9258ce6829e3764622c28fb1f28a74d25a1c&)
 
 <div align="center">
   
