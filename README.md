@@ -36,24 +36,24 @@ const ALLAY_XD_20 = {
     ],
     
     languages: {
-        expert: ["JavaScript", "TypeScript", "Python"],
-        proficient: ["HTML5", "CSS3", "SQL"],
-        learning: ["Rust", "Go", "React Native"]
+        expert: ["HTML5", "CSS3", "JavaScript", "Node.js"],
+        proficient: ["Python", "Java", "C++"],
+        learning: ["TypeScript", "React", "MongoDB"]
     },
     
     technologies: {
-        discordBots: ["Discord.js", "Discord.py", "Slash Commands", "Buttons & Modals"],
-        frontend: ["React", "Vue.js", "Next.js", "TailwindCSS", "Bootstrap"],
-        backend: ["Node.js", "Express", "FastAPI", "RESTful APIs"],
-        databases: ["MongoDB", "PostgreSQL", "MySQL", "Redis"],
-        cloud: ["AWS", "Heroku", "Vercel", "Railway"],
-        tools: ["Git", "Docker", "Postman", "Figma"]
+        webDevelopment: ["HTML5", "CSS3", "JavaScript", "Responsive Design"],
+        backend: ["Node.js", "Express", "Python", "RESTful APIs"],
+        programming: ["Java", "C++", "Object-Oriented Programming"],
+        discordBots: ["Discord.js", "Discord.py", "Bot Development"],
+        databases: ["MongoDB", "MySQL", "SQLite"],
+        tools: ["Git", "VS Code", "Chrome DevTools", "Postman"]
     },
     
     currentProjects: [
-        "Advanced Discord Bot with AI Integration 🤖",
-        "E-commerce Web Application 🛒",
-        "Portfolio Website with 3D Elements 🌟"
+        "Interactive Web Applications with HTML/CSS/JS 🌐",
+        "Discord Bot Development with Node.js 🤖",
+        "Backend APIs with Python & Node.js 🔧"
     ],
     
     dailyLife: {
@@ -74,31 +74,24 @@ const ALLAY_XD_20 = {
 <div align="center">
 
 ### 💻 Programming Languages
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black&labelColor=000000)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white&labelColor=000000)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white&labelColor=000000)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white&labelColor=000000)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white&labelColor=000000)
-![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=000000)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black&labelColor=000000)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white&labelColor=000000)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white&labelColor=000000)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white&labelColor=000000)
+![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white&labelColor=000000)
 
 ### 🚀 Frameworks & Libraries
 ![Discord.js](https://img.shields.io/badge/Discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white&labelColor=000000)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB&labelColor=000000)
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white&labelColor=000000)
-![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white&labelColor=000000)
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white&labelColor=000000)
-![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D&labelColor=000000)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white&labelColor=000000)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white&labelColor=000000)
+![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white&labelColor=000000)
 
-### 🗄️ Databases & Cloud
+### 🗄️ Databases & Development Tools
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white&labelColor=000000)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=000000)
 ![MySQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white&labelColor=000000)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white&labelColor=000000)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white&labelColor=000000)
-![Heroku](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white&labelColor=000000)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=000000)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white&labelColor=000000)
 
 ### 🔧 Tools & Platforms
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white&labelColor=000000)
@@ -152,17 +145,17 @@ const ALLAY_XD_20 = {
 ### 🌟 My Best Projects
 
 <a href="https://github.com/ALLAY-XD-20">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=discord-bot-advanced&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=responsive-website&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
 </a>
 <a href="https://github.com/ALLAY-XD-20">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=fullstack-ecommerce&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=discord-bot-nodejs&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
 </a>
 
 <a href="https://github.com/ALLAY-XD-20">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=portfolio-3d&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=python-web-app&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
 </a>
 <a href="https://github.com/ALLAY-XD-20">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=react-dashboard&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=java-application&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
 </a>
 
 </div>
@@ -177,17 +170,18 @@ const ALLAY_XD_20 = {
 
 | Project | Description | Tech Stack | Status |
 |---------|-------------|------------|--------|
-| 🤖 **AI Discord Bot** | Advanced bot with GPT integration | Discord.js, OpenAI API, MongoDB | 🟡 In Progress |
-| 🛒 **E-commerce Platform** | Full-stack shopping platform | React, Node.js, Stripe, PostgreSQL | 🟢 Active |
-| 🌟 **3D Portfolio** | Interactive 3D portfolio website | Three.js, React, TailwindCSS | 🟡 Planning |
-| 📱 **Mobile App** | React Native productivity app | React Native, Firebase | 🔴 Upcoming |
+| 🌐 **Responsive Website** | Modern responsive web application | HTML5, CSS3, JavaScript | 🟢 Active |
+| 🤖 **Discord Bot** | Feature-rich Discord bot | Node.js, Discord.js | 🟡 In Progress |
+| 🐍 **Python Web App** | Backend API with Python | Python, Flask/FastAPI | 🟡 Planning |
+| ☕ **Java Application** | Desktop application project | Java, Swing/JavaFX | 🔴 Upcoming |
 
 ### 🎯 2025 Goals
-- 🌟 Build 10+ open source projects
-- 🤖 Master AI/ML integration in web apps  
-- 📱 Launch first mobile application
-- 🏆 Contribute to major open source projects
-- 📚 Learn Rust and blockchain development
+- 🌐 Build 10+ responsive websites with HTML/CSS/JS
+- 🤖 Create advanced Discord bots with Node.js
+- 🐍 Master Python for web development and automation
+- ☕ Develop desktop applications with Java
+- 🔧 Learn advanced C++ programming concepts
+- 📚 Contribute to open source projects
 
 </div>
 
@@ -200,14 +194,14 @@ const ALLAY_XD_20 = {
 ### 💪 Technical Proficiency
 
 ```
-Discord Bot Development    ████████████████████ 100%
-JavaScript/TypeScript      ██████████████████░░  90%
-React/Next.js             ████████████████░░░░  80%
-Node.js/Express           ████████████████░░░░  80%
-Python                    ██████████████░░░░░░  70%
-Database Management       ██████████████░░░░░░  70%
-UI/UX Design             ████████████░░░░░░░░  60%
-DevOps/Cloud             ██████████░░░░░░░░░░  50%
+Web Development              ████████████████████ 100%
+HTML/CSS/JavaScript          ████████████████████ 100%
+Node.js Development          ██████████████████░░  90%
+Python Programming          ████████████████░░░░  80%
+Java Programming            ████████████████░░░░  80%
+C++ Programming             ██████████████░░░░░░  70%
+Discord Bot Development     ██████████████░░░░░░  70%
+Database Management         ████████████░░░░░░░░  60%
 ```
 
 ### 🎨 Soft Skills
