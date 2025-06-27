@@ -57,10 +57,10 @@ const ALLAY_XD_20 = {
     ],
     
     dailyLife: {
-        code: "10+ hours",
-        coffee: "5+ cups ☕",
+        code: "5+ hours",
+        coffee: "2+ cups ☕",
         music: "Always playing 🎵",
-        learning: "Never stops 📚"
+        learning: "11th class in CBSE📚"
     },
     
     motto: "Code with passion, build with purpose! 🚀"
