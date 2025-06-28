@@ -144,44 +144,7 @@ const ALLAY_XD_20 = {
 
 ### 🌟 FOR YOU
 
-<!-- Animated Birds Start -->
-<div align="center">
-  <svg width="400" height="150" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Bird 1 -->
-    <g transform="translate(0, 50)" fill="#333">
-      <path d="M0,0 L-5,-5 L-10,0 Z"/> <!-- Left Wing -->
-      <path d="M0,0 L5,-5 L10,0 Z"/> <!-- Right Wing -->
-      <animateMotion path="M0 0 C 100 -50, 200 50, 400 0" dur="10s" repeatCount="indefinite" rotate="auto"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0; 0 -3; 0 0; 0 3; 0 0" dur="0.8s" repeatCount="indefinite" additive="sum"/>
-    </g>
 
-    <!-- Bird 2 (slightly different path and speed) -->
-    <g transform="translate(50, 80)" fill="#444">
-      <path d="M0,0 L-5,-5 L-10,0 Z"/>
-      <path d="M0,0 L5,-5 L10,0 Z"/>
-      <animateMotion path="M0 0 C 150 50, 250 -50, 350 0" dur="12s" repeatCount="indefinite" rotate="auto" begin="1s"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0; 0 -2.5; 0 0; 0 2.5; 0 0" dur="0.9s" repeatCount="indefinite" additive="sum"/>
-    </g>
-
-    <!-- Bird 3 (even slower and different path) -->
-    <g transform="translate(100, 30)" fill="#555">
-      <path d="M0,0 L-5,-5 L-10,0 Z"/>
-      <path d="M0,0 L5,-5 L10,0 Z"/>
-      <animateMotion path="M0 0 C 200 -30, 300 80, 0 30" dur="15s" repeatCount="indefinite" rotate="auto" begin="2s"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0; 0 -2; 0 0; 0 2; 0 0" dur="1s" repeatCount="indefinite" additive="sum"/>
-    </g>
-
-    <!-- Bird 4 (faster, higher) -->
-    <g transform="translate(150, 10)" fill="#666">
-      <path d="M0,0 L-5,-5 L-10,0 Z"/>
-      <path d="M0,0 L5,-5 L10,0 Z"/>
-      <animateMotion path="M0 0 C 100 100, 200 -20, 300 50" dur="8s" repeatCount="indefinite" rotate="auto" begin="0.5s"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0; 0 -3.5; 0 0; 0 3.5; 0 0" dur="0.7s" repeatCount="indefinite" additive="sum"/>
-    </g>
-
-  </svg>
-</div>
-<!-- Animated Birds End -->
 
 
 ## 🎯 Current Focus & Goals
