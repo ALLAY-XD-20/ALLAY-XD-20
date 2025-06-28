@@ -145,7 +145,7 @@ const ALLAY_XD_20 = {
 ### 🌟 My Best Projects
 
 <a href="https://github.com/ALLAY-XD-20">
-  <img align="center" src="https://github.com/ALLAY-XD-20/Discord-chatting-bot&repo=responsive-website&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=responsive-website&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
 </a>
 <a href="https://github.com/ALLAY-XD-20">
   <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&repo=discord-bot-nodejs&theme=radical&hide_border=true&border_radius=15&bg_color=0D1117&title_color=8A2BE2&text_color=FFFFFF&icon_color=FF6B6B" />
