@@ -144,7 +144,49 @@ const ALLAY_XD_20 = {
 
 ### 🌟 FOR YOU
 
+<!-- 🐦✨ Animated RGB Birds Start -->
+<div align="center">
 
+<svg width="100%" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rgbWings" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff0000">
+        <animate attributeName="stop-color" values="#ff0000;#00ff00;#0000ff;#ff0000" dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#00ffff">
+        <animate attributeName="stop-color" values="#00ffff;#ff00ff;#ffff00;#00ffff" dur="5s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <g id="bird">
+      <g>
+        <!-- Wings -->
+        <path d="M0,-25 Q15,0 0,25 Q-15,0 0,-25" fill="url(#rgbWings)">
+          <animateTransform attributeName="transform" type="rotate" values="-10;10;-10" dur="1s" repeatCount="indefinite"/>
+        </path>
+        <!-- Head -->
+        <circle cx="0" cy="-30" r="5" fill="#fff"/>
+        <!-- Eye -->
+        <circle cx="-1.5" cy="-31" r="1.2" fill="#000"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- Flying Birds -->
+  <use href="#bird">
+    <animateTransform attributeName="transform" type="translate" values="0 50; 800 60" dur="10s" repeatCount="indefinite" />
+  </use>
+  <use href="#bird">
+    <animateTransform attributeName="transform" type="translate" values="-100 80; 700 90" dur="12s" repeatCount="indefinite" />
+  </use>
+  <use href="#bird">
+    <animateTransform attributeName="transform" type="translate" values="-200 30; 600 40" dur="14s" repeatCount="indefinite" />
+  </use>
+
+</svg>
+
+</div>
+<!-- 🐦✨ Animated RGB Birds End -->
 
 
 ## 🎯 Current Focus & Goals
