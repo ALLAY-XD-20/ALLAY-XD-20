@@ -142,7 +142,7 @@ const ALLAY_XD_20 = {
 
 <div align="center">
 
-### 🌟 FOR YOU
+### 🌟 YOUR SYSTEM ? 
 
 <p align="center">
   <img src="https://cdn.discordapp.com/attachments/1381145666427818076/1388515653077569536/20250628_191517.jpg?ex=68614379&is=685ff1f9&hm=f89c724394534d49589e673984ca5d4356bb880c46e360bd5f3a565517a587c2" alt="Banner" style="max-width: 100%;">
