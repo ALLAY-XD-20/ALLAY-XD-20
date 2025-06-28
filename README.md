@@ -144,16 +144,10 @@ const ALLAY_XD_20 = {
 
 ### 🌟 FOR YOU
 
-<!-- Animated Banner Start -->
 <p align="center">
-  <svg width="100%" height="auto" viewBox="0 0 1600 400" xmlns="http://www.w3.org/2000/svg">
-    <image href="https://cdn.discordapp.com/attachments/1381145666427818076/1388515653077569536/20250628_191517.jpg?ex=68614379&is=685ff1f9&hm=f89c724394534d49589e673984ca5d4356bb880c46e360bd5f3a565517a587c2"
-           width="1600" height="400" opacity="0">
-      <animate attributeName="opacity" from="0" to="1" dur="1.5s" fill="freeze" />
-    </image>
-  </svg>
+  <img src="https://cdn.discordapp.com/attachments/1381145666427818076/1388515653077569536/20250628_191517.jpg?ex=68614379&is=685ff1f9&hm=f89c724394534d49589e673984ca5d4356bb880c46e360bd5f3a565517a587c2" alt="Banner" style="max-width: 100%;">
 </p>
-<!-- Animated Banner End -->
+
 
 ## 🎯 Current Focus & Goals
 
