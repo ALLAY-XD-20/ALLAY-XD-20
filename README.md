@@ -144,17 +144,16 @@ const ALLAY_XD_20 = {
 
 ### 🌟 FOR YOU
 
-<!-- 🐦 Simple Animated Bird - GitHub Compatible -->
-<div align="center">
-  <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <path d="M60,20 Q75,40 60,60 Q45,40 60,20" fill="red">
-      <animateTransform attributeName="transform" type="rotate" values="-5 60 40; 5 60 40; -5 60 40" dur="1s" repeatCount="indefinite"/>
-    </path>
-    <circle cx="60" cy="17" r="4" fill="white" />
-    <circle cx="59" cy="16" r="1.5" fill="black" />
+<!-- Animated Banner Start -->
+<p align="center">
+  <svg width="100%" height="auto" viewBox="0 0 1600 400" xmlns="http://www.w3.org/2000/svg">
+    <image href="https://cdn.discordapp.com/attachments/1381145666427818076/1388515653077569536/20250628_191517.jpg?ex=68614379&is=685ff1f9&hm=f89c724394534d49589e673984ca5d4356bb880c46e360bd5f3a565517a587c2"
+           width="1600" height="400" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="1.5s" fill="freeze" />
+    </image>
   </svg>
-</div>
-
+</p>
+<!-- Animated Banner End -->
 
 ## 🎯 Current Focus & Goals
 
