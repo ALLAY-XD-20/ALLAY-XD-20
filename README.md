@@ -142,11 +142,19 @@ const ALLAY_XD_20 = {
 
 <div align="center">
 
-### 🌟 YOUR SYSTEM ? 
+### ꧁꧂  Buy me a coffee ☕
 
-<p align="center">
-  <img src="https://cdn.discordapp.com/attachments/1381145666427818076/1388515653077569536/20250628_191517.jpg?ex=68614379&is=685ff1f9&hm=f89c724394534d49589e673984ca5d4356bb880c46e360bd5f3a565517a587c2" alt="Banner" style="max-width: 100%;">
-</p>
+![qrCode](https://raw.githubusercontent.com/noarche/cd-ripper/main/unrelated-ignore/CryptoQRcodes.png)
+
+**Bitcoin** address `bc1qnpjpacyl9sff6r4kfmn7c227ty9g50suhr0y9j`
+
+
+**Ethereum** address `0x94FcBab18E4c0b2FAf5050c0c11E056893134266`
+
+
+**Litecoin** address `ltc1qu7ze2hlnkh440k37nrm4nhpv2dre7fl8xu0egx`
+
+![githubstamp](https://github.com/user-attachments/assets/d7b584e2-ba2a-442c-8783-9acb3a4781a5)
 
 
 ## 🎯 Current Focus & Goals
