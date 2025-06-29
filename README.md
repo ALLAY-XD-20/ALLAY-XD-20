@@ -144,7 +144,7 @@ const ALLAY_XD_20 = {
 
 ### ꧁꧂  Buy me a coffee ☕
 
-![qrCode](https://raw.githubusercontent.com/noarche/cd-ripper/main/unrelated-ignore/CryptoQRcodes.png)
+![qrCode](SOON)
 
 **Bitcoin** address `bc1qqu95jhnd27awgaygn4pjlr4vqrxawsph9npyn4`
 
