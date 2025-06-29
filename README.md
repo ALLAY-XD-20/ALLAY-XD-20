@@ -146,13 +146,16 @@ const ALLAY_XD_20 = {
 
 ![qrCode](https://raw.githubusercontent.com/noarche/cd-ripper/main/unrelated-ignore/CryptoQRcodes.png)
 
-**Bitcoin** address `bc1qnpjpacyl9sff6r4kfmn7c227ty9g50suhr0y9j`
+**Bitcoin** address `bc1qqu95jhnd27awgaygn4pjlr4vqrxawsph9npyn4`
 
 
-**Ethereum** address `0x94FcBab18E4c0b2FAf5050c0c11E056893134266`
+**Ethereum** address `0x13240C3a8C1416aa7Ce7B41ab61CeF7B19cf06C9`
 
 
-**Litecoin** address `ltc1qu7ze2hlnkh440k37nrm4nhpv2dre7fl8xu0egx`
+**Litecoin** address `LgKc1NhBS6J7J8Eh8YQkLpcz2rMasWnbD3`
+
+
+**Dogecoin** address `DMFh2jfsxc2VHtAfq4Mmu3CXoxp2DNVRF6`
 
 ![githubstamp](https://github.com/user-attachments/assets/d7b584e2-ba2a-442c-8783-9acb3a4781a5)
 
