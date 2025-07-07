@@ -144,8 +144,7 @@ const ALLAY_XD_20 = {
 
 ### ꧁꧂  Buy me a coffee ☕
 
-![qrCode](https://cdn.discordapp.com/attachments/1382606226545967165/1388842056260255794/20250629_165151.jpg?ex=68627375&is=686121f5&hm=d1b117b17f03afe6ceab7f0d1412a2e941e7d59c5bde9f8bd8ac81274a9a2873&)
-
+![qrCode](https://cdn.discordapp.com/attachments/1382606226545967165/1388842056260255794/20250629_165151.jpg?ex=686cff75&is=686badf5&hm=e73a7d913c20a1c26b9be4c032b9be27053c0c43c7f19589f155a9403a7133a2&)
 **Bitcoin** address `bc1qqu95jhnd27awgaygn4pjlr4vqrxawsph9npyn4`
 
 
