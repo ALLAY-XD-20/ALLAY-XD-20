@@ -1,4 +1,4 @@
-name: v2
+name: RDP
 
 on:
   workflow_dispatch:
@@ -11,30 +11,34 @@ jobs:
     steps:
       - name: Configure Core RDP Settings
         run: |
-          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
             -Name "fDenyTSConnections" -Value 0 -Force
 
-          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
             -Name "UserAuthentication" -Value 0 -Force
 
-          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
             -Name "SecurityLayer" -Value 0 -Force
 
           netsh advfirewall firewall delete rule name="RDP-Tailscale" 2>$null
           netsh advfirewall firewall add rule name="RDP-Tailscale" `
             dir=in action=allow protocol=TCP localport=3389
 
-          Restart-Service -Name TermService -Force
+          Restart-Service TermService -Force
 
-      - name: Create RDP User (Fixed Password)
+      - name: Create RDP User (FIXED PASSWORD)
         run: |
           $username = "RDP"
-          $password = "PAWAN500"
+          $password = "PAWAN@500"   # 🔒 FIXED & VALID
 
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force
 
           if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)) {
-            New-LocalUser -Name $username -Password $securePass -AccountNeverExpires
+            New-LocalUser `
+              -Name $username `
+              -Password $securePass `
+              -PasswordNeverExpires `
+              -AccountNeverExpires
           }
 
           Add-LocalGroupMember -Group "Administrators" -Member $username
@@ -65,7 +69,10 @@ jobs:
             Start-Sleep 5
           }
 
-          if (-not $ip) { exit 1 }
+          if (-not $ip) {
+            Write-Error "Tailscale IP not assigned"
+            exit 1
+          }
 
           echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
 
@@ -76,10 +83,10 @@ jobs:
       - name: Maintain Connection
         run: |
           Write-Host "=============================="
-          Write-Host " RDP READY"
+          Write-Host " RDP ACTIVE"
           Write-Host " Address  : $env:TAILSCALE_IP"
           Write-Host " Username : RDP"
-          Write-Host " Password : PAWAN500"
+          Write-Host " Password : PAWAN@500"
           Write-Host "=============================="
 
           while ($true) {
