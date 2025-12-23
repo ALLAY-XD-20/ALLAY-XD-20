@@ -1,0 +1,126 @@
+name: beta
+
+on:
+  workflow_dispatch:
+
+jobs:
+  secure-rdp:
+    runs-on: windows-latest
+    timeout-minutes: 3600
+
+    steps:
+      - name: Enable RDP
+        run: |
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
+            -Name fDenyTSConnections -Value 0 -Force
+
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
+            -Name UserAuthentication -Value 0 -Force
+
+          netsh advfirewall firewall delete rule name="RDP-Tailscale" 2>$null
+          netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389
+
+          Restart-Service TermService -Force
+
+      - name: Create RDP User (FIXED PASSWORD)
+        run: |
+          $username = "RDP"
+          $password = "PAWAN@500"   # 🔒 Windows-policy safe
+
+          $securePass = ConvertTo-SecureString $password -AsPlainText -Force
+
+          if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)) {
+            New-LocalUser -Name $username -Password $securePass `
+              -PasswordNeverExpires -AccountNeverExpires
+          }
+
+          Add-LocalGroupMember Administrators $username
+          Add-LocalGroupMember "Remote Desktop Users" $username
+
+          echo "RDP_USER=$username" >> $env:GITHUB_ENV
+          echo "RDP_PASS=$password" >> $env:GITHUB_ENV
+
+      - name: Install Tailscale
+        run: |
+          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi"
+          $path = "$env:TEMP\tailscale.msi"
+          Invoke-WebRequest $url -OutFile $path
+          Start-Process msiexec.exe -ArgumentList "/i `"$path`" /quiet /norestart" -Wait
+          Remove-Item $path -Force
+
+      - name: Connect Tailscale
+        run: |
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
+            --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
+            --hostname=gh-runner-$env:GITHUB_RUN_ID
+
+          for ($i=0; $i -lt 10; $i++) {
+            $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
+            if ($ip) {
+              echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
+              break
+            }
+            Start-Sleep 5
+          }
+
+      - name: Auto Restart Watchdog
+        run: |
+          function Restart-All {
+            Restart-Service TermService -Force
+            Start-Sleep 10
+
+            & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
+              --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
+              --hostname=gh-runner-$env:GITHUB_RUN_ID
+
+            Start-Sleep 10
+
+            $test = Test-NetConnection $env:TAILSCALE_IP -Port 3389
+            if (-not $test.TcpTestSucceeded) {
+              shutdown /r /t 5
+            }
+          }
+
+          while ($true) {
+            $svc = Get-Service TermService
+            if ($svc.Status -ne "Running") { Restart-All }
+
+            $check = Test-NetConnection $env:TAILSCALE_IP -Port 3389
+            if (-not $check.TcpTestSucceeded) { Restart-All }
+
+            Start-Sleep 120
+          }
+
+      - name: Keep Alive (Info)
+        run: |
+          Write-Host "=============================="
+          Write-Host " RDP READY"
+          Write-Host " Address  : $env:TAILSCALE_IP"
+          Write-Host " Username : RDP"
+          Write-Host " Password : PAWAN@500"
+          Write-Host "=============================="
+          while ($true) { Start-Sleep 300 }
+
+      # 🔄 AUTO SELF-RERUN (CRITICAL)
+      - name: Auto Self Re-Run on Exit
+        if: always()
+        run: |
+          Write-Host "🔄 Re-dispatching workflow..."
+
+          $repo = "${{ github.repository }}"
+          $workflow = "${{ github.workflow }}"
+
+          $url = "https://api.github.com/repos/$repo/actions/workflows/$workflow/dispatches"
+
+          $body = @{
+            ref = "${{ github.ref_name }}"
+          } | ConvertTo-Json
+
+          Invoke-RestMethod `
+            -Method POST `
+            -Uri $url `
+            -Headers @{
+              Authorization = "Bearer $env:GITHUB_TOKEN"
+              Accept = "application/vnd.github+json"
+            } `
+            -Body $body
