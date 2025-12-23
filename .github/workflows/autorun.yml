@@ -1,4 +1,4 @@
-name: RDP
+name: RDP-auto
 
 on:
   workflow_dispatch:
