@@ -1,14 +1,22 @@
-name: beta
+name: RDP
 
 on:
   workflow_dispatch:
 
+# 🔑 REQUIRED PERMISSIONS (FIX 401 ERROR)
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   secure-rdp:
     runs-on: windows-latest
-    timeout-minutes: 3600
+    timeout-minutes: 360
 
     steps:
+      # =========================
+      # ENABLE RDP
+      # =========================
       - name: Enable RDP
         run: |
           Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
@@ -17,15 +25,18 @@ jobs:
           Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
             -Name UserAuthentication -Value 0 -Force
 
-          netsh advfirewall firewall delete rule name="RDP-Tailscale" 2>$null
-          netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389
+          netsh advfirewall firewall add rule name="RDP-Tailscale" `
+            dir=in action=allow protocol=TCP localport=3389
 
           Restart-Service TermService -Force
 
+      # =========================
+      # CREATE RDP USER (FIXED PASSWORD)
+      # =========================
       - name: Create RDP User (FIXED PASSWORD)
         run: |
           $username = "RDP"
-          $password = "PAWAN@500"   # 🔒 Windows-policy safe
+          $password = "PAWAN@500"   # ✅ Windows policy safe
 
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force
 
@@ -40,19 +51,25 @@ jobs:
           echo "RDP_USER=$username" >> $env:GITHUB_ENV
           echo "RDP_PASS=$password" >> $env:GITHUB_ENV
 
+      # =========================
+      # INSTALL TAILSCALE
+      # =========================
       - name: Install Tailscale
         run: |
-          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi"
+          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi"
           $path = "$env:TEMP\tailscale.msi"
           Invoke-WebRequest $url -OutFile $path
           Start-Process msiexec.exe -ArgumentList "/i `"$path`" /quiet /norestart" -Wait
           Remove-Item $path -Force
 
+      # =========================
+      # CONNECT TAILSCALE
+      # =========================
       - name: Connect Tailscale
         run: |
           & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
             --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
-            --hostname=gh-runner-$env:GITHUB_RUN_ID
+            --hostname=gh-runner-${{ github.run_id }}
 
           for ($i=0; $i -lt 10; $i++) {
             $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
@@ -63,6 +80,9 @@ jobs:
             Start-Sleep 5
           }
 
+      # =========================
+      # AUTO RESTART WATCHDOG
+      # =========================
       - name: Auto Restart Watchdog
         run: |
           function Restart-All {
@@ -71,14 +91,11 @@ jobs:
 
             & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
               --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
-              --hostname=gh-runner-$env:GITHUB_RUN_ID
+              --hostname=gh-runner-${{ github.run_id }}
 
             Start-Sleep 10
 
-            $test = Test-NetConnection $env:TAILSCALE_IP -Port 3389
-            if (-not $test.TcpTestSucceeded) {
-              shutdown /r /t 5
-            }
+            shutdown /r /t 5
           }
 
           while ($true) {
@@ -91,6 +108,9 @@ jobs:
             Start-Sleep 120
           }
 
+      # =========================
+      # KEEP ALIVE INFO
+      # =========================
       - name: Keep Alive (Info)
         run: |
           Write-Host "=============================="
@@ -101,26 +121,30 @@ jobs:
           Write-Host "=============================="
           while ($true) { Start-Sleep 300 }
 
-      # 🔄 AUTO SELF-RERUN (CRITICAL)
+      # =========================
+      # 🔄 AUTO SELF RE-RUN (FIXED)
+      # =========================
       - name: Auto Self Re-Run on Exit
         if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Write-Host "🔄 Re-dispatching workflow..."
 
           $repo = "${{ github.repository }}"
-          $workflow = "${{ github.workflow }}"
+          $workflowFile = "autorun.yml"   # ✅ MUST match file name
+          $ref = "${{ github.ref_name }}"
 
-          $url = "https://api.github.com/repos/$repo/actions/workflows/$workflow/dispatches"
+          $url = "https://api.github.com/repos/$repo/actions/workflows/$workflowFile/dispatches"
 
-          $body = @{
-            ref = "${{ github.ref_name }}"
-          } | ConvertTo-Json
+          $body = @{ ref = $ref } | ConvertTo-Json
 
           Invoke-RestMethod `
             -Method POST `
             -Uri $url `
             -Headers @{
-              Authorization = "Bearer $env:GITHUB_TOKEN"
+              Authorization = "Bearer $env:GH_TOKEN"
               Accept = "application/vnd.github+json"
+              "User-Agent" = "github-actions"
             } `
             -Body $body
