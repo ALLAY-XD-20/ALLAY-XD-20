@@ -1,0 +1,119 @@
+name: v2
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  secure-rdp:
+    runs-on: windows-latest
+    timeout-minutes: 360
+
+    steps:
+    # =========================
+    # ENABLE RDP
+    # =========================
+    - name: Enable RDP
+      shell: pwsh
+      run: |
+        Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
+          -Name fDenyTSConnections -Value 0 -Force
+        Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
+          -Name UserAuthentication -Value 0 -Force
+        netsh advfirewall firewall add rule name="RDP" dir=in action=allow protocol=TCP localport=3389
+        Restart-Service TermService -Force
+
+    # =========================
+    # CREATE USER
+    # =========================
+    - name: Create RDP User
+      shell: pwsh
+      run: |
+        $u="RDP"; $p="PAWAN@500"
+        $s=ConvertTo-SecureString $p -AsPlainText -Force
+        if (-not (Get-LocalUser $u -ErrorAction SilentlyContinue)) {
+          New-LocalUser $u -Password $s -PasswordNeverExpires -AccountNeverExpires
+        }
+        Add-LocalGroupMember Administrators $u
+        Add-LocalGroupMember "Remote Desktop Users" $u
+
+    # =========================
+    # AUTO LOGIN
+    # =========================
+    - name: Enable Auto Login
+      shell: pwsh
+      run: |
+        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
+        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d RDP /f
+        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d PAWAN@500 /f
+
+    # =========================
+    # INSTALL + START TAILSCALE
+    # =========================
+    - name: Install Tailscale
+      shell: pwsh
+      run: |
+        $msi="$env:TEMP\tailscale.msi"
+        Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi -OutFile $msi
+        Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /quiet /norestart" -Wait
+        Start-Service Tailscale
+        Start-Sleep 10
+
+    # =========================
+    # CONNECT + CAPTURE AUTH LINK
+    # =========================
+    - name: Connect Tailscale (Capture Auth URL)
+      shell: pwsh
+      run: |
+        $log = "$env:TEMP\tailscale.log"
+
+        & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
+          --hostname=gh-rdp-${{ github.run_id }} `
+          --accept-dns=false 2>&1 | Tee-Object -FilePath $log
+
+        $auth = Select-String "https://login.tailscale.com" $log | Select-Object -First 1
+        if ($auth) {
+          $url = $auth.ToString().Trim()
+          echo "TAILSCALE_AUTH_URL=$url" >> $env:GITHUB_ENV
+        }
+
+        $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
+        echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
+
+    # =========================
+    # DISCORD WEBHOOK (AUTH LINK)
+    # =========================
+    - name: Discord Webhook Notify
+      if: always()
+      shell: pwsh
+      run: |
+        if (-not "${{ secrets.DISCORD_WEBHOOK }}") {
+          Write-Host "❌ DISCORD_WEBHOOK secret missing"
+          exit 0
+        }
+
+        $content = @"
+🖥️ **RDP READY**
+
+🌐 IP: $env:TAILSCALE_IP
+👤 User: RDP
+🔑 Pass: PAWAN@500
+
+🔐 **Tailscale Login**
+$env:TAILSCALE_AUTH_URL
+"@
+
+        $json = @{ content = $content } | ConvertTo-Json
+        Invoke-RestMethod -Uri "${{ secrets.DISCORD_WEBHOOK }}" `
+          -Method POST -ContentType "application/json" -Body $json
+
+    # =========================
+    # KEEP ALIVE
+    # =========================
+    - name: Keep Alive
+      shell: pwsh
+      run: |
+        while ($true) { Start-Sleep 300 }
