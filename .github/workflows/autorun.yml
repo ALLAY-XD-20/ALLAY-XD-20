@@ -1,103 +1,109 @@
-name: RDP-auto-Tailscale-Discord
+name: RDP
 
 on:
-  workflow_dispatch: # Manual start
-  schedule:
-    - cron: '0 */6 * * *' # Backup auto-start every 6 hours
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   actions: write
   contents: read
 
 jobs:
-  # This job ensures the RDP process is always active
   secure-rdp:
     runs-on: windows-latest
-    timeout-minutes: 360
+    timeout-minutes: 3600
 
-    steps:  
-      # 1. SETUP RDP ENVIRONMENT
-      - name: Configure Windows & RDP
-        run: |  
-          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections -Value 0 -Force  
-          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name UserAuthentication -Value 0 -Force  
-          netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389  
-          
-          $username = "RDP_User"  
-          $password = "PAWAN@500"  
-          $securePass = ConvertTo-SecureString $password -AsPlainText -Force  
-          if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)) {  
-            New-LocalUser -Name $username -Password $securePass -PasswordNeverExpires -AccountNeverExpires  
-          }  
-          Add-LocalGroupMember Administrators $username  
-          Add-LocalGroupMember "Remote Desktop Users" $username  
-          Restart-Service TermService -Force  
+    steps:
+    # =========================
+    # ENABLE RDP
+    # =========================
+    - name: Enable RDP
+      run: |
+        Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
+          -Name fDenyTSConnections -Value 0 -Force
 
-      # 2. INSTALL & AUTO-CONNECT TAILSCALE
-      - name: Install and Auth Tailscale
-        run: |  
-          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi"
-          Invoke-WebRequest $url -OutFile "ts.msi"
-          Start-Process msiexec.exe -ArgumentList "/i ts.msi /quiet /norestart" -Wait
-          
-          # Auth and set hostname
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-rdp-auto --accept-routes
-          
-          $ip = ""
-          for ($i=0; $i -lt 12; $i++) {
-            $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
-            if ($ip) { break }
-            Start-Sleep 5
-          }
-          echo "TS_IP=$ip" >> $env:GITHUB_ENV
+        Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
+          -Name UserAuthentication -Value 0 -Force
 
-      # 3. SEND CREDENTIALS TO DISCORD
-      - name: Discord Notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: |
-          $payload = @{
-            content = "🚀 **RDP System Online**"
-            embeds = @(@{
-              title = "Connection Details"
-              color = 3066993
-              fields = @(
-                @{ name = "Tailscale IP"; value = "``$env:TS_IP``"; inline = $true },
-                @{ name = "User"; value = "``RDP_User``"; inline = $true },
-                @{ name = "Pass"; value = "``PAWAN@500``"; inline = $true }
-              )
-            })
-          } | ConvertTo-Json
-          
-          Invoke-RestMethod -Uri $env:DISCORD_WEBHOOK -Method Post -Body $payload -ContentType "application/json"
+        netsh advfirewall firewall add rule name="RDP-Tailscale" `
+          dir=in action=allow protocol=TCP localport=3389
 
-      # 4. RECONNECT WATCHDOG (Keep Alive)
-      - name: Watchdog & Keep Alive
-        run: |  
-          while ($true) {  
-            $ts = & "$env:ProgramFiles\Tailscale\tailscale.exe" status
-            if ($ts -match "Logged out" -or $ts -match "offline") {
-               & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }}
-            }
-            # Check RDP Service
-            if ((Get-Service TermService).Status -ne "Running") { Restart-Service TermService -Force }
-            Start-Sleep 120
-          }  
+        Restart-Service TermService -Force
 
-      # 5. AUTO RE-RUN (Triggers next session before this one ends)
-      - name: Re-trigger Workflow
-        if: always()  
-        env:  
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-        run: |  
-          Start-Sleep 30
-          $repo = "${{ github.repository }}"  
-          # Ensure filename below matches your .yml file name exactly
-          $url = "https://api.github.com/repos/$repo/actions/workflows/RDP-auto.yml/dispatches"  
-          Invoke-RestMethod -Method POST -Uri $url -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } -Body (@{ ref = "${{ github.ref_name }}" } | ConvertTo-Json)
-          Invoke-RestMethod -Method POST -Uri $url `
+    # =========================
+    # CREATE USER (FIXED PASS)
+    # =========================
+    - name: Create RDP User
+      run: |
+        $username = "RDP"
+        $password = "PAWAN@500"
+
+        $secure = ConvertTo-SecureString $password -AsPlainText -Force
+
+        if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)) {
+          New-LocalUser -Name $username -Password $secure `
+            -PasswordNeverExpires -AccountNeverExpires
+        }
+
+        Add-LocalGroupMember Administrators $username
+        Add-LocalGroupMember "Remote Desktop Users" $username
+
+        echo "RDP_USER=$username" >> $env:GITHUB_ENV
+        echo "RDP_PASS=$password" >> $env:GITHUB_ENV
+
+    # =========================
+    # AUTO LOGIN (CRITICAL)
+    # =========================
+    - name: Enable Auto Login
+      run: |
+        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
+        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d RDP /f
+        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d PAWAN@500 /f
+
+    # =========================
+    # INSTALL TAILSCALE
+    # =========================
+    - name: Install Tailscale
+      run: |
+        $url = "https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi"
+        $path = "$env:TEMP\tailscale.msi"
+        Invoke-WebRequest $url -OutFile $path
+        Start-Process msiexec.exe -ArgumentList "/i `"$path`" /quiet /norestart" -Wait
+
+    # =========================
+    # CONNECT TAILSCALE
+    # =========================
+    - name: Connect Tailscale
+      run: |
+        & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
+          --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
+          --hostname=gh-rdp-$env:GITHUB_RUN_ID
+
+        $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
+        echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
+
+    # =========================
+    # SEND DISCORD WEBHOOK
+    # =========================
+    - name: Discord Webhook Notify
+      run: |
+        $msg = @{
+          content = "**🖥️ RDP READY**`n`n🔗 IP: $env:TAILSCALE_IP`n👤 User: RDP`n🔑 Pass: PAWAN@500`n⏱️ Time: 60 minutes"
+        } | ConvertTo-Json
+
+        Invoke-RestMethod `
+          -Uri "${{ secrets.DISCORD_WEBHOOK }}" `
+          -Method POST `
+          -ContentType "application/json" `
+          -Body $msg
+
+    # =========================
+    # KEEP RUNNER ALIVE
+    # =========================
+    - name: Keep Alive
+      run: |
+        while ($true) {
+          Start-Sleep 300
+        }          Invoke-RestMethod -Method POST -Uri $url `
             -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = "application/vnd.github+json" } `
             -Body (@{ ref = "${{ github.ref_name }}" } | ConvertTo-Json)
 
