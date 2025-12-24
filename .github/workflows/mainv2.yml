@@ -1,20 +1,20 @@
-name: RDP-New
+name: RDP
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
   actions: write
+  contents: read
 
 jobs:
-  rdp:
+  secure-rdp:
     runs-on: windows-latest
     timeout-minutes: 360
 
     steps:
     # =========================
-    # STEP 1: ENABLE RDP
+    # ENABLE RDP
     # =========================
     - name: Enable RDP
       shell: pwsh
@@ -25,29 +25,34 @@ jobs:
         Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
           -Name UserAuthentication -Value 0 -Force
 
-        netsh advfirewall firewall add rule name="RDP" dir=in action=allow protocol=TCP localport=3389
+        netsh advfirewall firewall delete rule name="RDP-Tailscale" 2>$null
+        netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389
+
         Restart-Service TermService -Force
 
     # =========================
-    # STEP 2: CREATE RDP USER
+    # CREATE RDP USER
     # =========================
-    - name: Create RDP User
+    - name: Create RDP User (FIXED PASSWORD)
       shell: pwsh
       run: |
-        $USER = "RDP"
-        $PASS = "PAWAN@500"
-        $SEC = ConvertTo-SecureString $PASS -AsPlainText -Force
+        $username = "RDP"
+        $password = "PAWAN@500"
+        $secure = ConvertTo-SecureString $password -AsPlainText -Force
 
-        if (-not (Get-LocalUser $USER -ErrorAction SilentlyContinue)) {
-          New-LocalUser $USER -Password $SEC `
+        if (-not (Get-LocalUser $username -ErrorAction SilentlyContinue)) {
+          New-LocalUser $username -Password $secure `
             -PasswordNeverExpires -AccountNeverExpires
         }
 
-        Add-LocalGroupMember Administrators $USER
-        Add-LocalGroupMember "Remote Desktop Users" $USER
+        Add-LocalGroupMember Administrators $username
+        Add-LocalGroupMember "Remote Desktop Users" $username
+
+        echo "RDP_USER=$username" >> $env:GITHUB_ENV
+        echo "RDP_PASS=$password" >> $env:GITHUB_ENV
 
     # =========================
-    # STEP 3: AUTO LOGIN
+    # AUTO LOGIN
     # =========================
     - name: Enable Auto Login
       shell: pwsh
@@ -57,7 +62,7 @@ jobs:
         reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d PAWAN@500 /f
 
     # =========================
-    # STEP 4: INSTALL TAILSCALE
+    # INSTALL TAILSCALE
     # =========================
     - name: Install Tailscale
       shell: pwsh
@@ -75,29 +80,112 @@ jobs:
         Start-Sleep 10
 
     # =========================
-    # STEP 5: CONNECT + CAPTURE AUTH LINK
+    # CONNECT TAILSCALE + CAPTURE AUTH LINK
     # =========================
     - name: Connect Tailscale
       shell: pwsh
+      timeout-minutes: 2
       run: |
         $log = "$env:TEMP\tailscale.log"
 
         & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
-          --hostname=gh-rdp-${{ github.run_id }} `
+          --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
+          --hostname=gh-runner-${{ github.run_id }} `
           --accept-dns=false 2>&1 | Tee-Object -FilePath $log
 
         $auth = Select-String "https://login.tailscale.com" $log | Select-Object -First 1
         if ($auth) {
           $url = $auth.ToString().Trim()
-          echo "TS_AUTH_URL=$url" >> $env:GITHUB_ENV
+          echo "TAILSCALE_AUTH_URL=$url" >> $env:GITHUB_ENV
         }
 
-        $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
-        echo "TS_IP=$ip" >> $env:GITHUB_ENV
+        for ($i=0; $i -lt 10; $i++) {
+          $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
+          if ($ip) {
+            echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
+            break
+          }
+          Start-Sleep 5
+        }
 
     # =========================
-    # STEP 6: DISCORD WEBHOOK
+    # DISCORD WEBHOOK (OPTIONAL)
     # =========================
+    - name: Discord Notify
+      if: always()
+      shell: pwsh
+      run: |
+        if (-not "${{ secrets.DISCORD_WEBHOOK }}") {
+          Write-Host "DISCORD_WEBHOOK not set – skipping"
+          exit 0
+        }
+
+        $msg = @"
+🖥️ **RDP READY**
+
+🌐 IP: $env:TAILSCALE_IP
+👤 User: RDP
+🔑 Pass: PAWAN@500
+
+🔐 **Tailscale Login**
+$env:TAILSCALE_AUTH_URL
+"@
+
+        $json = @{ content = $msg } | ConvertTo-Json
+        Invoke-RestMethod `
+          -Uri "${{ secrets.DISCORD_WEBHOOK }}" `
+          -Method POST `
+          -ContentType "application/json" `
+          -Body $json
+
+    # =========================
+    # WATCHDOG (NON-BLOCKING)
+    # =========================
+    - name: Auto Restart Watchdog
+      shell: pwsh
+      run: |
+        for ($i=0; $i -lt 30; $i++) {
+          $svc = Get-Service TermService
+          if ($svc.Status -ne "Running") {
+            Restart-Service TermService -Force
+          }
+
+          $check = Test-NetConnection $env:TAILSCALE_IP -Port 3389
+          if (-not $check.TcpTestSucceeded) {
+            Restart-Service TermService -Force
+          }
+
+          Start-Sleep 120
+        }
+
+    # =========================
+    # KEEP ALIVE
+    # =========================
+    - name: Keep Alive
+      shell: pwsh
+      run: |
+        Write-Host "RDP ACTIVE"
+        while ($true) { Start-Sleep 300 }
+
+    # =========================
+    # AUTO SELF RE-RUN
+    # =========================
+    - name: Auto Self Re-Run on Exit
+      if: always()
+      shell: pwsh
+      run: |
+        $url = "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ github.workflow }}.yml/dispatches"
+
+        $body = @{ ref = "${{ github.ref_name }}" } | ConvertTo-Json
+
+        Invoke-RestMethod `
+          -Method POST `
+          -Uri $url `
+          -Headers @{
+            Authorization = "Bearer $env:GITHUB_TOKEN"
+            Accept = "application/vnd.github+json"
+          } `
+          -Body $body    # =========================
     - name: Send Discord Webhook
       if: always()
       shell: pwsh
