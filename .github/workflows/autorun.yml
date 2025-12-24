@@ -1,27 +1,30 @@
-name: RDP-auto-
+name: RDP-auto-Tailscale-Discord
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual start
+  schedule:
+    - cron: '0 */6 * * *' # Backup auto-start every 6 hours
+  push:
+    branches: [ main ]
 
 permissions:
   actions: write
   contents: read
 
 jobs:
+  # This job ensures the RDP process is always active
   secure-rdp:
     runs-on: windows-latest
     timeout-minutes: 360
 
     steps:  
-      - name: Enable RDP  
+      # 1. SETUP RDP ENVIRONMENT
+      - name: Configure Windows & RDP
         run: |  
           Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections -Value 0 -Force  
           Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name UserAuthentication -Value 0 -Force  
           netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389  
-          Restart-Service TermService -Force  
-
-      - name: Create RDP User
-        run: |  
+          
           $username = "RDP_User"  
           $password = "PAWAN@500"  
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force  
@@ -30,73 +33,70 @@ jobs:
           }  
           Add-LocalGroupMember Administrators $username  
           Add-LocalGroupMember "Remote Desktop Users" $username  
+          Restart-Service TermService -Force  
 
-      - name: Install & Connect Tailscale
+      # 2. INSTALL & AUTO-CONNECT TAILSCALE
+      - name: Install and Auth Tailscale
         run: |  
           $url = "https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi"
           Invoke-WebRequest $url -OutFile "ts.msi"
           Start-Process msiexec.exe -ArgumentList "/i ts.msi /quiet /norestart" -Wait
           
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-${{ github.run_id }}
+          # Auth and set hostname
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-rdp-auto --accept-routes
           
           $ip = ""
-          for ($i=0; $i -lt 10; $i++) {
+          for ($i=0; $i -lt 12; $i++) {
             $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
             if ($ip) { break }
             Start-Sleep 5
           }
           echo "TS_IP=$ip" >> $env:GITHUB_ENV
 
-      # =========================  
-      # SEND TO DISCORD
-      # =========================  
-      - name: Send Credentials to Discord
+      # 3. SEND CREDENTIALS TO DISCORD
+      - name: Discord Notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           $payload = @{
+            content = "🚀 **RDP System Online**"
             embeds = @(@{
-              title = "🚀 RDP Session Started"
+              title = "Connection Details"
               color = 3066993
               fields = @(
                 @{ name = "Tailscale IP"; value = "``$env:TS_IP``"; inline = $true },
-                @{ name = "Username"; value = "``RDP_User``"; inline = $true },
-                @{ name = "Password"; value = "``PAWAN@500``"; inline = $true },
-                @{ name = "Status"; value = "✅ Online & Reconnecting" }
+                @{ name = "User"; value = "``RDP_User``"; inline = $true },
+                @{ name = "Pass"; value = "``PAWAN@500``"; inline = $true }
               )
             })
           } | ConvertTo-Json
           
           Invoke-RestMethod -Uri $env:DISCORD_WEBHOOK -Method Post -Body $payload -ContentType "application/json"
 
-      - name: Connection Watchdog & Keep Alive
+      # 4. RECONNECT WATCHDOG (Keep Alive)
+      - name: Watchdog & Keep Alive
         run: |  
           while ($true) {  
-            # Reconnect Tailscale if down
-            $status = & "$env:ProgramFiles\Tailscale\tailscale.exe" status
-            if ($status -match "Logged out") {
+            $ts = & "$env:ProgramFiles\Tailscale\tailscale.exe" status
+            if ($ts -match "Logged out" -or $ts -match "offline") {
                & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }}
             }
+            # Check RDP Service
+            if ((Get-Service TermService).Status -ne "Running") { Restart-Service TermService -Force }
             Start-Sleep 120
           }  
 
-      - name: Auto Re-dispatch
+      # 5. AUTO RE-RUN (Triggers next session before this one ends)
+      - name: Re-trigger Workflow
         if: always()  
         env:  
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         run: |  
+          Start-Sleep 30
           $repo = "${{ github.repository }}"  
+          # Ensure filename below matches your .yml file name exactly
           $url = "https://api.github.com/repos/$repo/actions/workflows/RDP-auto.yml/dispatches"  
-          Invoke-RestMethod -Method POST -Uri $url -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } -Body (@{ ref = "main" } | ConvertTo-Json)
-        if: always()  
-        env:  
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-        run: |  
-          Start-Sleep 10 # Avoid loop spam
-          $repo = "${{ github.repository }}"  
-          $workflowFile = "RDP-auto.yml" # Ensure this matches your ACTUAL .yml filename
-          $url = "https://api.github.com/repos/$repo/actions/workflows/$workflowFile/dispatches"  
-          
+          Invoke-RestMethod -Method POST -Uri $url -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } -Body (@{ ref = "${{ github.ref_name }}" } | ConvertTo-Json)
           Invoke-RestMethod -Method POST -Uri $url `
             -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = "application/vnd.github+json" } `
             -Body (@{ ref = "${{ github.ref_name }}" } | ConvertTo-Json)
