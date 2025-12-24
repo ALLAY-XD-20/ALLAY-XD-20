@@ -1,4 +1,4 @@
-name: x-bulder
+name: x
 
 on:
   workflow_dispatch:
