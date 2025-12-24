@@ -1,47 +1,53 @@
-name: v2
+name: RDP-New
 
 on:
   workflow_dispatch:
 
 permissions:
-  actions: write
   contents: read
+  actions: write
 
 jobs:
-  secure-rdp:
+  rdp:
     runs-on: windows-latest
     timeout-minutes: 360
 
     steps:
     # =========================
-    # ENABLE RDP
+    # STEP 1: ENABLE RDP
     # =========================
     - name: Enable RDP
       shell: pwsh
       run: |
         Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
           -Name fDenyTSConnections -Value 0 -Force
+
         Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
           -Name UserAuthentication -Value 0 -Force
+
         netsh advfirewall firewall add rule name="RDP" dir=in action=allow protocol=TCP localport=3389
         Restart-Service TermService -Force
 
     # =========================
-    # CREATE USER
+    # STEP 2: CREATE RDP USER
     # =========================
     - name: Create RDP User
       shell: pwsh
       run: |
-        $u="RDP"; $p="PAWAN@500"
-        $s=ConvertTo-SecureString $p -AsPlainText -Force
-        if (-not (Get-LocalUser $u -ErrorAction SilentlyContinue)) {
-          New-LocalUser $u -Password $s -PasswordNeverExpires -AccountNeverExpires
+        $USER = "RDP"
+        $PASS = "PAWAN@500"
+        $SEC = ConvertTo-SecureString $PASS -AsPlainText -Force
+
+        if (-not (Get-LocalUser $USER -ErrorAction SilentlyContinue)) {
+          New-LocalUser $USER -Password $SEC `
+            -PasswordNeverExpires -AccountNeverExpires
         }
-        Add-LocalGroupMember Administrators $u
-        Add-LocalGroupMember "Remote Desktop Users" $u
+
+        Add-LocalGroupMember Administrators $USER
+        Add-LocalGroupMember "Remote Desktop Users" $USER
 
     # =========================
-    # AUTO LOGIN
+    # STEP 3: AUTO LOGIN
     # =========================
     - name: Enable Auto Login
       shell: pwsh
@@ -51,21 +57,27 @@ jobs:
         reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d PAWAN@500 /f
 
     # =========================
-    # INSTALL + START TAILSCALE
+    # STEP 4: INSTALL TAILSCALE
     # =========================
     - name: Install Tailscale
       shell: pwsh
       run: |
-        $msi="$env:TEMP\tailscale.msi"
-        Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi -OutFile $msi
-        Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /quiet /norestart" -Wait
+        $msi = "$env:TEMP\tailscale.msi"
+        Invoke-WebRequest `
+          https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi `
+          -OutFile $msi
+
+        Start-Process msiexec.exe `
+          -ArgumentList "/i `"$msi`" /quiet /norestart" `
+          -Wait
+
         Start-Service Tailscale
         Start-Sleep 10
 
     # =========================
-    # CONNECT + CAPTURE AUTH LINK
+    # STEP 5: CONNECT + CAPTURE AUTH LINK
     # =========================
-    - name: Connect Tailscale (Capture Auth URL)
+    - name: Connect Tailscale
       shell: pwsh
       run: |
         $log = "$env:TEMP\tailscale.log"
@@ -77,27 +89,52 @@ jobs:
         $auth = Select-String "https://login.tailscale.com" $log | Select-Object -First 1
         if ($auth) {
           $url = $auth.ToString().Trim()
-          echo "TAILSCALE_AUTH_URL=$url" >> $env:GITHUB_ENV
+          echo "TS_AUTH_URL=$url" >> $env:GITHUB_ENV
         }
 
         $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
-        echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
+        echo "TS_IP=$ip" >> $env:GITHUB_ENV
 
     # =========================
-    # DISCORD WEBHOOK (AUTH LINK)
+    # STEP 6: DISCORD WEBHOOK
     # =========================
-    - name: Discord Webhook Notify
+    - name: Send Discord Webhook
       if: always()
       shell: pwsh
       run: |
         if (-not "${{ secrets.DISCORD_WEBHOOK }}") {
-          Write-Host "❌ DISCORD_WEBHOOK secret missing"
+          Write-Host "DISCORD_WEBHOOK not set"
           exit 0
         }
 
-        $content = @"
+        $msg = @"
 🖥️ **RDP READY**
 
+🌐 IP: $env:TS_IP
+👤 User: RDP
+🔑 Pass: PAWAN@500
+
+🔐 **Tailscale Login**
+$env:TS_AUTH_URL
+"@
+
+        $json = @{ content = $msg } | ConvertTo-Json
+        Invoke-RestMethod `
+          -Uri "${{ secrets.DISCORD_WEBHOOK }}" `
+          -Method POST `
+          -ContentType "application/json" `
+          -Body $json
+
+    # =========================
+    # STEP 7: KEEP ALIVE
+    # =========================
+    - name: Keep Runner Alive
+      shell: pwsh
+      run: |
+        Write-Host "RDP is active"
+        while ($true) {
+          Start-Sleep 300
+        }
 🌐 IP: $env:TAILSCALE_IP
 👤 User: RDP
 🔑 Pass: PAWAN@500
