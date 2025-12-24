@@ -1,9 +1,7 @@
-name: RDP-auto-Tailscale
+name: RDP-auto-Tailscale-Discord
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 */5 * * *' # Optional: Auto-start every 5 hours
 
 permissions:
   actions: write
@@ -12,12 +10,9 @@ permissions:
 jobs:
   secure-rdp:
     runs-on: windows-latest
-    timeout-minutes: 360 # GitHub Maximum
+    timeout-minutes: 360
 
     steps:  
-      # =========================  
-      # ENABLE RDP  
-      # =========================  
       - name: Enable RDP  
         run: |  
           Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections -Value 0 -Force  
@@ -25,78 +20,74 @@ jobs:
           netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389  
           Restart-Service TermService -Force  
 
-      # =========================  
-      # CREATE RDP USER  
-      # =========================  
       - name: Create RDP User
         run: |  
-          $username = "RDP"  
+          $username = "RDP_User"  
           $password = "PAWAN@500"  
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force  
-
           if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)) {  
             New-LocalUser -Name $username -Password $securePass -PasswordNeverExpires -AccountNeverExpires  
           }  
           Add-LocalGroupMember Administrators $username  
           Add-LocalGroupMember "Remote Desktop Users" $username  
 
-      # =========================  
-      # INSTALL & START TAILSCALE  
-      # =========================  
-      - name: Install Tailscale  
+      - name: Install & Connect Tailscale
         run: |  
-          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi"  
-          $path = "$env:TEMP\tailscale.msi"  
-          Invoke-WebRequest $url -OutFile $path  
-          Start-Process msiexec.exe -ArgumentList "/i `"$path`" /quiet /norestart" -Wait  
-
-      - name: Connect Tailscale  
-        run: |  
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-${{ github.run_id }} --accept-routes
+          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi"
+          Invoke-WebRequest $url -OutFile "ts.msi"
+          Start-Process msiexec.exe -ArgumentList "/i ts.msi /quiet /norestart" -Wait
           
-          # Wait for IP
-          for ($i=0; $i -lt 12; $i++) {  
-            $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4  
-            if ($ip) {  
-              Write-Host "Tailscale IP: $ip"
-              echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV  
-              break  
-            }  
-            Start-Sleep 5  
-          }  
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-${{ github.run_id }}
+          
+          $ip = ""
+          for ($i=0; $i -lt 10; $i++) {
+            $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
+            if ($ip) { break }
+            Start-Sleep 5
+          }
+          echo "TS_IP=$ip" >> $env:GITHUB_ENV
 
       # =========================  
-      # AUTO-RECONNECT WATCHDOG  
+      # SEND TO DISCORD
       # =========================  
-      - name: Connection Watchdog  
+      - name: Send Credentials to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          $payload = @{
+            embeds = @(@{
+              title = "🚀 RDP Session Started"
+              color = 3066993
+              fields = @(
+                @{ name = "Tailscale IP"; value = "``$env:TS_IP``"; inline = $true },
+                @{ name = "Username"; value = "``RDP_User``"; inline = $true },
+                @{ name = "Password"; value = "``PAWAN@500``"; inline = $true },
+                @{ name = "Status"; value = "✅ Online & Reconnecting" }
+              )
+            })
+          } | ConvertTo-Json
+          
+          Invoke-RestMethod -Uri $env:DISCORD_WEBHOOK -Method Post -Body $payload -ContentType "application/json"
+
+      - name: Connection Watchdog & Keep Alive
         run: |  
-          Write-Host "=============================="  
-          Write-Host " RDP READY"  
-          Write-Host " Address  : $env:TAILSCALE_IP"  
-          Write-Host " Username : RDP"  
-          Write-Host " Password : PAWAN@500"  
-          Write-Host "=============================="  
-
-          # Background loop to monitor both RDP and Tailscale
           while ($true) {  
-            $ts_status = & "$env:ProgramFiles\Tailscale\tailscale.exe" status
-            if ($ts_status -match "Logged out" -or $ts_status -match "offline") {
-                Write-Host "Tailscale disconnected. Reconnecting..."
-                & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }}
+            # Reconnect Tailscale if down
+            $status = & "$env:ProgramFiles\Tailscale\tailscale.exe" status
+            if ($status -match "Logged out") {
+               & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }}
             }
-            
-            $rdp_status = Get-Service TermService
-            if ($rdp_status.Status -ne "Running") {
-                Restart-Service TermService -Force
-            }
-
-            Start-Sleep 60
+            Start-Sleep 120
           }  
 
-      # =========================  
-      # 🔄 AUTO SELF RE-RUN  
-      # =========================  
       - name: Auto Re-dispatch
+        if: always()  
+        env:  
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+        run: |  
+          $repo = "${{ github.repository }}"  
+          $url = "https://api.github.com/repos/$repo/actions/workflows/RDP-auto.yml/dispatches"  
+          Invoke-RestMethod -Method POST -Uri $url -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } -Body (@{ ref = "main" } | ConvertTo-Json)
         if: always()  
         env:  
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
