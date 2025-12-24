@@ -1,4 +1,4 @@
-name: RDP-auto-Tailscale-Discord
+name: RDP-auto-
 
 on:
   workflow_dispatch:
