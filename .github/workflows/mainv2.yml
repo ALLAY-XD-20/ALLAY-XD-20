@@ -1,109 +1,89 @@
-name: RDP
+name: RDP-Tailscale
 
 on:
   workflow_dispatch:
 
-permissions:
-  actions: write
-  contents: read
-
 jobs:
   secure-rdp:
     runs-on: windows-latest
-    timeout-minutes: 360
+    timeout-minutes: 3600
+    permissions:
+      contents: write
+      actions: write
 
     steps:
-    # =========================
-    # ENABLE RDP
-    # =========================
-    - name: Enable RDP
-      shell: pwsh
-      run: |
-        Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' `
-          -Name fDenyTSConnections -Value 0 -Force
+      - name: Enable RDP
+        run: |
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections -Value 0 -Force
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name UserAuthentication -Value 0 -Force
+          netsh advfirewall firewall delete rule name="RDP-Tailscale" 2>$null
+          netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389
+          Restart-Service TermService -Force
 
-        Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' `
-          -Name UserAuthentication -Value 0 -Force
+      - name: Create RDP User
+        run: |
+          $username = "RDP"
+          $password = "PAWAN@500"
+          $securePass = ConvertTo-SecureString $password -AsPlainText -Force
+          if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)) {
+            New-LocalUser -Name $username -Password $securePass -PasswordNeverExpires -AccountNeverExpires
+          }
+          Add-LocalGroupMember Administrators $username
+          Add-LocalGroupMember "Remote Desktop Users" $username
+          echo "RDP_USER=$username" >> $env:GITHUB_ENV
+          echo "RDP_PASS=$password" >> $env:GITHUB_ENV
 
-        netsh advfirewall firewall delete rule name="RDP-Tailscale" 2>$null
-        netsh advfirewall firewall add rule name="RDP-Tailscale" dir=in action=allow protocol=TCP localport=3389
+      - name: Install Tailscale
+        run: |
+          $url = "https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi"
+          $path = "$env:TEMP\tailscale.msi"
+          Invoke-WebRequest $url -OutFile $path
+          Start-Process msiexec.exe -ArgumentList "/i `"$path`" /quiet /norestart" -Wait
+          Remove-Item $path -Force
 
-        Restart-Service TermService -Force
+      - name: Connect Tailscale (Auto Login)
+        env:
+          TS_KEY: ${{ secrets.TAILSCALE_AUTH_KEY }}
+        run: |
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey="$env:TS_KEY" --hostname="gh-runner-$env:GITHUB_RUN_ID"
+          
+          # Wait and grab the IP
+          for ($i=0; $i -lt 10; $i++) {
+            $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
+            if ($ip) {
+              echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
+              break
+            }
+            Start-Sleep 5
+          }
 
-    # =========================
-    # CREATE RDP USER
-    # =========================
-    - name: Create RDP User (FIXED PASSWORD)
-      shell: pwsh
-      run: |
-        $username = "RDP"
-        $password = "PAWAN@500"
-        $secure = ConvertTo-SecureString $password -AsPlainText -Force
+      - name: Send Login Details to Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          $payload = @{
+            content = "✅ **RDP Online**`n**IP:** $env:TAILSCALE_IP`n**User:** $env:RDP_USER`n**Pass:** $env:RDP_PASS"
+          } | ConvertTo-Json
+          Invoke-RestMethod -Uri $env:WEBHOOK_URL -Method Post -Body $payload -ContentType "application/json"
 
-        if (-not (Get-LocalUser $username -ErrorAction SilentlyContinue)) {
-          New-LocalUser $username -Password $secure `
-            -PasswordNeverExpires -AccountNeverExpires
-        }
+      - name: Watchdog & Keep Alive
+        run: |
+          Write-Host "RDP is ready at $env:TAILSCALE_IP"
+          # Simple loop to keep the runner alive for the duration
+          $timeout = New-TimeSpan -Hours 6
+          $start = Get-Date
+          while ((Get-Date) -lt ($start + $timeout)) {
+              Start-Sleep -Seconds 300
+          }
 
-        Add-LocalGroupMember Administrators $username
-        Add-LocalGroupMember "Remote Desktop Users" $username
-
-        echo "RDP_USER=$username" >> $env:GITHUB_ENV
-        echo "RDP_PASS=$password" >> $env:GITHUB_ENV
-
-    # =========================
-    # AUTO LOGIN
-    # =========================
-    - name: Enable Auto Login
-      shell: pwsh
-      run: |
-        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
-        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d RDP /f
-        reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d PAWAN@500 /f
-
-    # =========================
-    # INSTALL TAILSCALE
-    # =========================
-    - name: Install Tailscale
-      shell: pwsh
-      run: |
-        $msi = "$env:TEMP\tailscale.msi"
-        Invoke-WebRequest `
-          https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi `
-          -OutFile $msi
-
-        Start-Process msiexec.exe `
-          -ArgumentList "/i `"$msi`" /quiet /norestart" `
-          -Wait
-
-        Start-Service Tailscale
-        Start-Sleep 10
-
-    # =========================
-    # CONNECT TAILSCALE + CAPTURE AUTH LINK
-    # =========================
-    - name: Connect Tailscale
-      shell: pwsh
-      timeout-minutes: 2
-      run: |
-        $log = "$env:TEMP\tailscale.log"
-
-        & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
-          --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} `
-          --hostname=gh-runner-${{ github.run_id }} `
-          --accept-dns=false 2>&1 | Tee-Object -FilePath $log
-
-        $auth = Select-String "https://login.tailscale.com" $log | Select-Object -First 1
-        if ($auth) {
-          $url = $auth.ToString().Trim()
-          echo "TAILSCALE_AUTH_URL=$url" >> $env:GITHUB_ENV
-        }
-
-        for ($i=0; $i -lt 10; $i++) {
-          $ip = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
-          if ($ip) {
-            echo "TAILSCALE_IP=$ip" >> $env:GITHUB_ENV
-            break
+      - name: Auto Self Re-Run
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $url = "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ github.workflow }}/dispatches"
+          $body = @{ ref = "${{ github.ref_name }}" } | ConvertTo-Json
+          Invoke-RestMethod -Method POST -Uri $url -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } -Body $body
           }
           Start-Sleep 5
         }
