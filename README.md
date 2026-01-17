@@ -1,91 +1,119 @@
+<div align="center">
+
+ALLAY_XD_20
+
+Elite Discord Bot Developer & Full Stack Engineer
+
+const passion = crafting_digital_experiences();
 
 
+while(alive()) { code(); }
+
+---
+
+</div>
+
+about.ts
+
+```typescript
+interface Developer {
+    name: "ALLAY_XD_20";
+    role: "Elite Discord Bot Developer | Full Stack Web Developer";
+    education: "11th Grade CBSE | Self-Taught Developer";
+    status: "Building scalable bots & modern web applications";
+    philosophy: "Clean code, robust architecture, and user-centric design.";
+}
+```
+
+links.json
+
+```json
+{
+  "GitHub": "https://github.com/ALLAY-XD-20",
+  "LinkedIn": "https://linkedin.com/in/allay-xd-20",
+  "Twitter": "https://twitter.com/ALLAY_XD_20",
+  "Discord": "https://discord.gg/5YsStsgmXA",
+  "Email": "allay.xd.20@gmail.com"
+}
+```
+
+stack.ts
+
+```typescript
+const stack = {
+  frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "React"],
+  backend: ["Node.js", "Express", "Python", "FastAPI"],
+  discord: ["Discord.js", "Discord.py", "Lavalink", "Automation", "Music Bots"],
+  databases: ["MongoDB", "MySQL", "Firebase", "SQLite"],
+  tools: ["Git", "GitHub", "Linux", "Docker", "Postman"]
+};
+```
+
+projects.ts
+
+```typescript
+const featuredProjects = [
+  {
+    name: "Player",
+    description: "Advanced YouTube Music Discord Bot with high-quality audio and queue management.",
+    tech: ["Discord.js", "Lavalink", "Node.js"],
+    link: "https://github.com/ALLAY-XD-20/player"
+  },
+  {
+    name: "Devine",
+    description: "Modern, full-stack web application with a focus on performance and clean UI.",
+    tech: ["React", "TypeScript", "Node.js"],
+    link: "https://github.com/ALLAY-XD-20/Devine"
+  },
+  {
+    name: "AI Discord Chat Bot",
+    description: "Intelligent chatbot for Discord utilizing conversational AI.",
+    tech: ["Python", "Discord.py", "AI"],
+    link: "https://github.com/ALLAY-XD-20/Discord-chatting-bot"
+  },
+  {
+    name: "Ohbump Web",
+    description: "TypeScript-based web application for streamlined bump management.",
+    tech: ["TypeScript", "React", "Express"],
+    link: "https://github.com/ALLAY-XD-20/Ohbump-web"
+  }
+];
+```
+
+analytics.md
+
+<div align="center">
+
+https://github-readme-stats.vercel.app/api?username=ALLAY-XD-20&show_icons=true&theme=radical&hide_border=true&count_private=true
+https://github-readme-stats.vercel.app/api/top-langs/?username=ALLAY-XD-20&layout=compact&theme=radical&hide_border=true
+
+
+https://streak-stats.demolab.com?user=ALLAY-XD-20&theme=radical&hide_border=true
+
+
+https://komarev.com/ghpvc/?username=ALLAY-XD-20&color=blueviolet&style=flat
+
+</div>
+
+philosophy.txt
+
+```
+> Build systems, not just scripts.
+> Prioritize scalability and maintainability.
+> Learn in public; build in the open.
+> Every line of code is a conscious design decision.
+```
 
 ---
 
 <div align="center">
 
-# 🎨 ✨ ALLAY_XD_20 ✨ 🎨
-### 🚀 Elite Discord Bot Developer | 🌐 Full Stack Web Architect | 💻 Modern Tech Innovator
+"First, solve the problem. Then, write the code." – John Johnson
 
----
-
-## 🌟 Welcome to My Digital Universe 🌟
-
-![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Righteous&size=30&duration=3000&pause=1000&color=FF006E&background=0D1117&center=true&vCenter=true&width=900&height=70&lines=Discord+Bot+Developer;Full+Stack+Developer;Code+Innovator)
-
----
-
-## 📱 Connect With Me 📱
-
-[![Discord](https://img.shields.io/badge/Discord-allay__gaming__5m-7289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/5YsStsgmXA)
-[![GitHub](https://img.shields.io/badge/GitHub-ALLAY--XD--20-100000?style=flat-square&logo=github&logoColor=white)](https://github.com/ALLAY-XD-20)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-ALLAY--XD--20-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/allay-xd-20)
-[![Twitter](https://img.shields.io/badge/Twitter-@ALLAY__XD__20-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://twitter.com/ALLAY_XD_20)
-[![Email](https://img.shields.io/badge/Email-Contact_Me-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:allay.xd.20@gmail.com)
+<br>
+© 2024 • Crafted with precision.
 
 </div>
-
----
-
-## 💎 About Me 💎
-
-```ts
-const ALLAY_XD_20 = {
-  role: "Elite Full Stack Developer",
-  expertise: {
-    frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "React"],
-    backend: ["Node.js", "Express", "Python", "FastAPI"],
-    bots: ["Discord.js", "Discord.py", "Automation", "Music Bots"],
-    databases: ["MongoDB", "MySQL", "Firebase", "SQLite"]
-  },
-  education: "11th Grade CBSE | Self-Taught Developer",
-  motto: "Code Today, Innovate Tomorrow"
-};
-
-
----
-
-🛠️ Tech Stack & Skills 🛠️
-
-🎨 Frontend
-
-    
-
-⚙️ Backend
-
-   
-
-🤖 Discord & Bots
-
-  
-
-
----
-
-🎯 Featured Projects 🎯
-
-🎵 Player – YouTube Music Discord Bot
-
-👉 https://github.com/ALLAY-XD-20/player
-
-🌐 Devine – Modern Web App
-
-👉 https://github.com/ALLAY-XD-20/Devine
-
-🤖 AI Discord Chat Bot
-
-👉 https://github.com/ALLAY-XD-20/Discord-chatting-bot
-
-⚡ Ohbump Web – TypeScript App
-
-👉 https://github.com/ALLAY-XD-20/Ohbump-web
-
-
----
-
-📊 GitHub Stats 📊
-
  
 
 
