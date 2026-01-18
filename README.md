@@ -1,5 +1,4 @@
-
-<h1 align="center">Hi ðŸ‘‹, I'm Pawan</h1>
+<h1 align="center">Hi 👋, I'm Pawan</h1>
 <h3 align="center">A normal developer from India</h3>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=allay-xd-20&label=Profile%20views&color=0e75b6&style=flat" alt="allay-xd-20" /> </p>
@@ -8,11 +7,11 @@
 
 <p align="left"> <a href="https://twitter.com/allay_xd_20" target="blank"><img src="https://img.shields.io/twitter/follow/allay_xd_20?logo=twitter&style=for-the-badge" alt="allay_xd_20" /></a> </p>
 
-- ðŸ”­ Iâ€™m currently working on **Minecraft plugins**
+- 🔭 I’m currently working on **Minecraft plugins**
 
-- ðŸŒ± Iâ€™m currently learning **In 11th class in delhi**
+- 🌱 I’m currently learning **In 11th class in delhi**
 
-- ðŸ“« How to reach me **ugking2024@gmail.com**
+- 📫 How to reach me **ugking2024@gmail.com**
 
 ### Blogs posts
 <!-- BLOG-POST-LIST:START -->
@@ -36,3 +35,4 @@
 <p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=allay-xd-20&show_icons=true&locale=en" alt="allay-xd-20" /></p>
 
 <p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=allay-xd-20&" alt="allay-xd-20" /></p>
+
