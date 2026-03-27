@@ -1,102 +1,105 @@
-<!-- Animated Name -->
-<h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=35&duration=3000&color=00F7FF&center=true&vCenter=true&width=600&lines=Hi+👋+I'm+Pawan;Minecraft+Plugin+Developer;Java+Backend+Enthusiast;Future+Full+Stack+Developer" />
-</h1>
 
-<h3 align="center">🚀 Student Developer from India 🇮🇳 | Building Powerful Minecraft Plugins</h3>
 
----
+👾 Pawan | ALLAY-XD-20
 
-<!-- Profile Views & Badges -->
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=ALLAY-XD-20&label=Profile%20Views&color=blueviolet&style=for-the-badge" />
-  <img src="https://img.shields.io/github/followers/ALLAY-XD-20?style=for-the-badge&color=blue" />
-  <img src="https://img.shields.io/github/stars/ALLAY-XD-20?style=for-the-badge&color=yellow" />
-</p>
+<p align="center">        
+  <img src="https://readme-typing-svg.herokuapp.com?color=00FF00&size=25&center=true&vCenter=true&width=600&lines=Hello+World!+I'm+Pawan;Hacker+Mode+Activated+💻;Python+%7C+NodeJS+Developer;Welcome+to+my+GitHub+Profile+🚀">        
+</p>---        🧠 About Me
 
----
+> Initializing user...
+Name: Pawan
+Role: Developer | Hacker Mindset 😎
+Languages: Python, NodeJS, HTML, Testskript
+Status: Always Building 🚀
 
-## 👨‍💻 About Me
 
-- 🎓 Class 11 Student from Delhi
-- 🔭 Currently building **Advanced Minecraft Plugins**
-- 🌱 Learning **Backend Development & Cloud**
-- ⚡ Love automation, servers & game systems
-- 📫 Contact: **ugking2024@gmail.com**
+
 
 ---
 
-## 🛠️ Tech Stack
+🌐 Connect With Me
 
-### 💻 Languages
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=java,python,cpp,js,ts,php" />
-</p>
+🎮 Discord: allay_gaming_x
 
-### 🌐 Web & Frameworks
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=react,nodejs,html,css,flutter" />
-</p>
+📺 YouTube: @3xboiz
 
-### ☁️ Database & Cloud
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=firebase,mongodb,mysql,aws,gcp" />
-</p>
+💬 Contact: Discord Only
 
-### ⚙️ Tools & Platforms
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=git,docker,linux,unity,androidstudio" />
-</p>
+
 
 ---
 
-## 📊 GitHub Stats
+💻 Tech Stack
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ALLAY-XD-20&show_icons=true&theme=tokyonight&hide_border=true" height="170" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ALLAY-XD-20&layout=compact&theme=tokyonight&hide_border=true" height="170" />
-</p>
+<p align="center">        
+  <img src="https://skillicons.dev/icons?i=python,nodejs,html,js,github" />        
+</p>---        📊 GitHub Stats
 
-<p align="center">
-  <img src="https://streak-stats.demolab.com?user=ALLAY-XD-20&theme=tokyonight&hide_border=true" />
-</p>
+<p align="center">        
+  <img src="https://github-readme-stats.vercel.app/api?username=ALLAY-XD-20&show_icons=true&theme=radical&bg_color=000000&title_color=00ff00&icon_color=00ff00&text_color=ffffff" />        
+</p>---        🔥 Most Used Languages
 
----
+<p align="center">        
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ALLAY-XD-20&layout=compact&theme=radical&bg_color=000000&title_color=00ff00&text_color=ffffff" />        
+</p>---        ⚡ Streak Stats
 
-## 🐍 Contribution Snake Animation
+<p align="center">        
+  <img src="https://streak-stats.demolab.com?user=ALLAY-XD-20&theme=radical&background=000000&ring=00ff00&fire=00ff00&currStreakLabel=00ff00" />        
+</p>---        👀 Profile Views
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/ALLAY-XD-20/ALLAY-XD-20/output/github-contribution-grid-snake.svg" />
-</p>
+<p align="center">        
+  <img src="https://komarev.com/ghpvc/?username=ALLAY-XD-20&label=PROFILE+VIEWS&color=00ff00&style=flat" />        
+</p>---        🤖 Random Dev Joke
 
----
+<p align="center">        
+  <img src="https://readme-jokes.vercel.app/api?theme=dark" />        
+</p>---        🧩 Discord Status (Live)
 
-## 🌐 Connect With Me
+<p align="center">        
+  <img src="https://lanyard.cnrad.dev/api/allay_gaming_x?theme=dark&bg=000000&borderRadius=10px" />        
+</p>---        💰 Donations
 
-<p align="center">
-  <a href="https://twitter.com/allay_xd_20">
-    <img src="https://skillicons.dev/icons?i=twitter" />
-  </a>
-  <a href="https://instagram.com/allayxd20">
-    <img src="https://skillicons.dev/icons?i=instagram" />
-  </a>
-  <a href="https://dev.to/allay_xd_20">
-    <img src="https://skillicons.dev/icons?i=devto" />
-  </a>
-  <a href="https://www.youtube.com/c/3xboiz">
-    <img src="https://skillicons.dev/icons?i=youtube" />
-  </a>
-</p>
+LTC: LgKc1NhBS6J7J8Eh8YQkLpcz2rMasWnbD3
+SOL: 8S4q4L142kkvZAxokXBUxFqXzFrZWq2NTd69xVsJZ2RJ
+
 
 ---
 
-## 💡 Developer Mindset
+📂 Featured Projects (Auto Update)
 
-> ⚔️ Code. Build. Break. Fix. Repeat.  
-> 🚀 Started early. Scaling daily.
+<p align="center">        
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=ALLAY-XD-20&theme=radical&bg_color=000000&title_color=00ff00&text_color=ffffff" />        
+</p>---        🖥️ Hacker Terminal Animation
+
+> Access Granted...
+Loading Projects...
+Injecting Code...
+Welcome to ALLAY-XD-20 System 💀
+
+
+
 
 ---
 
-<p align="center">
-  ⭐ From <a href="https://github.com/ALLAY-XD-20">ALLAY-XD-20</a>
-</p>
+⚠️ Fun Mode Activated
+
+Why do programmers prefer dark mode?
+👉 Because light attracts bugs 🐛
+
+I told my code to work…
+👉 It said “I need debugging, not motivation” 😂
+
+
+
+---
+
+🚀 Motto
+
+Code. Break. Fix. Repeat.
+
+
+---
+
+<p align="center">        
+  ⚡ Built with Hacker Energy ⚡        
+</p>   
