@@ -21,14 +21,14 @@ Always building 🚀
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=python,nodejs,html,js,linux,git,github,vscode" />
-</p>---
+</p>
 
 📊 GitHub Stats
 
 
 </p><p align="center">
   <img src="https://streak-stats.demolab.com?user=ALLAY-XD-20&theme=tokyonight&hide_border=true"/>
-</p>---
+</p>
 
 🚀 Projects
 
@@ -36,14 +36,14 @@ Always building 🚀
 
 ✔ Check pinned repos above 👆
 
----
+
 
 🎮 Connect
 
 - 💬 Discord: allay_gaming_x
 - 🎥 YouTube: @3xboiz
 
----
+
 
 💰 Support
 
@@ -53,7 +53,7 @@ LgKc1NhBS6J7J8Eh8YQkLpcz2rMasWnbD3
 SOL:
 8S4q4L142kkvZAxokXBUxFqXzFrZWq2NTd69xVsJZ2RJ
 
----
+
 
 😂 Dev Joke
 
