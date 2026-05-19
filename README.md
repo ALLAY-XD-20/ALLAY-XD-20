@@ -25,10 +25,7 @@ Always building 🚀
 
 📊 GitHub Stats
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ALLAY-XD-20&show_icons=true&theme=tokyonight&hide_border=true"/>
-</p><p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ALLAY-XD-20&layout=compact&theme=tokyonight&hide_border=true"/>
+
 </p><p align="center">
   <img src="https://streak-stats.demolab.com?user=ALLAY-XD-20&theme=tokyonight&hide_border=true"/>
 </p>---
