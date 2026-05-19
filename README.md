@@ -4,6 +4,10 @@
   <img src="https://readme-typing-svg.herokuapp.com?color=00FFCC&size=22&center=true&vCenter=true&width=600&lines=Full+Stack+Developer;Python+%7C+NodeJS+%7C+Web;Building+Cool+Projects;Hacker+Mode+ON+😎"/>
 </p>---
 
+🧐 DISCORD STATUS 
+
+ [![allay_gaming_x's Discord status](https://dsc-readme.tsuni.dev/api/user/1032944901412880394?theme=dark&width=512)](https://github.com/the-snesler/discord-github-preview)
+
 👨‍💻 About Me
 
 $ whoami
