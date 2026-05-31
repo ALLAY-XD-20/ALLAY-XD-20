@@ -70,3 +70,12 @@ SOL:
 </p><p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,100:00ffcc&height=120&section=footer"/>
 </p>
+👀 Total Views
+
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=ALLAY-XD-20&label=Total%20Views&color=0e75b6&style=for-the-badge" alt="views"/>
+</p><p align="center">
+  📊 <b>Repository Views:</b>
+  <br>
+  <sub>1,000 → 1K • 10,000 → 10K • 1,000,000 → 1M</sub>
+</p>
