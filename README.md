@@ -2,7 +2,7 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00ffcc,100:0f2027&height=180&section=header&text=Pawan%20%7C%20ALLAY-XD-20&fontSize=35&fontColor=00ffcc&animation=twinkling"/>
 </p><p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?color=00FFCC&size=22&center=true&vCenter=true&width=600&lines=Full+Stack+Developer;Python+%7C+NodeJS+%7C+Web;Building+Cool+Projects;Hacker+Mode+ON+😎"/>
-</p>---
+</p>
 
 🧐 DISCORD STATUS 
 
@@ -19,7 +19,6 @@ Python | NodeJS | HTML | Testskript
 $ status
 Always building 🚀
 
----
 
 ⚡ Tech Stack
 
