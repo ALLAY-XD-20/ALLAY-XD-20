@@ -4,8 +4,21 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?color=B026FF&size=22&center=true&vCenter=true&width=600&lines=💜+Full+Stack+Developer;🐍+Python+%7C+NodeJS+%7C+Web;🚀+Building+Cool+Projects;😎+Hacker+Mode+ON"/>
+  <img src="https://readme-typing-svg.herokuapp.com?color=B026FF&size=22&center=true&vCenter=true&width=650&lines=💜+Full+Stack+Developer;🤝+Open+for+Freelance+Work;💸+Affordable+%26+Reliable;🚀+Let%27s+Build+Something+Cool"/>
 </p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Available%20for%20Hire-B026FF?style=for-the-badge&logo=discord&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Pricing-Budget%20Friendly-E100FF?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Response-Fast%20%26%20Friendly-9D4EDD?style=for-the-badge"/>
+</p>
+
+<p align="center">
+  Hey, I'm <b>Pawan</b> — I build bots, plugins, panels & web tools under <b>Team Lyrixa</b> 🟣<br/>
+  Got a project in mind? I keep it simple, fast, and easy on your budget. Let's talk 👇
+</p>
+
+---
 
 ## 👨‍💻 About Me
 
@@ -17,8 +30,24 @@ $ skills
 Python | NodeJS | HTML | Testskript
 
 $ status
-Always building 🚀✨
+Always building 🚀✨ | Open for freelance work 🤝
 ```
+
+## 💼 Services I Offer
+
+<div align="center">
+
+| Service | What I Build |
+|:---:|:---|
+| 🤖 **Discord Bots** | Custom bots, moderation, music, automation |
+| ⛏️ **Minecraft Plugins** | Server plugins, DDoS protection, custom mechanics |
+| 🖥️ **Pterodactyl Extensions** | Panel extensions, hosting infra, billing tools |
+| 🌐 **Web Frontends** | Landing pages, dashboards, admin panels |
+| 📄 **Single-file HTML Tools** | Lightweight self-contained web apps |
+
+</div>
+
+<p align="center">💸 <b>Fair, affordable pricing — DM me your idea and I'll quote it fast!</b> 💸</p>
 
 ## ⚡ Tech Stack
 
@@ -36,12 +65,20 @@ Always building 🚀✨
 
 👉 **[Check out all my repos](https://github.com/ALLAY-XD-20?tab=repositories)**
 
-✔️ Pinned repos are above 👆
+✔️ Pinned repos are above 👆 — real, working examples of what I can build for you
 
-## 🎮 Connect
+---
 
-- 💬 Discord: `allay_gaming_x`
-- 🎥 YouTube: @3xboiz
+## 🎮 Let's Work Together
+
+<p align="center">
+  📩 Have a project? Drop me a message — quick replies, fair prices, quality work.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Discord-allay__gaming__x-B026FF?style=for-the-badge&logo=discord&logoColor=white"/>
+  <img src="https://img.shields.io/badge/YouTube-%403xMr_bulb_xd-E100FF?style=for-the-badge&logo=youtube&logoColor=white"/>
+</p>
 
 ## 😂 Dev Joke
 
