@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  Hey, I'm <b>Pawan</b> — I build bots, plugins, panels & web tools under <b>Team Lyrixa</b> 🟣<br/>
+  Hey, I'm <b>Pawan</b> — I build bots, plugins, panels & web tools under <b>Team Flayer</b> 🟣<br/>
   Got a project in mind? I keep it simple, fast, and easy on your budget. Let's talk 👇
 </p>
 
